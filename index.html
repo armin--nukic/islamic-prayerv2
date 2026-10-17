@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Beautiful Islamic prayer times app with city search, Hijri date, daily hadith, important Islamic days, English and Bosnian language support, and night mode."
+    />
+    <meta
+      name="keywords"
+      content="Islamic prayer times, vaktija, namaz times, salah times, Hijri date, Islamic calendar, Bosnian vaktija, Berlin prayer times"
+    />
+    <meta name="author" content="Islamic Prayer Vaktija" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#12362f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Islamic Prayer Vaktija" />
+    <meta
+      property="og:description"
+      content="Prayer times, Hijri date, Islamic calendar highlights, and daily reminders in English and Bosnian."
+    />
+    <meta property="og:image" content="assets/logo.svg" />
+    <meta property="og:site_name" content="Islamic Prayer Vaktija" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Islamic Prayer Vaktija" />
+    <meta
+      name="twitter:description"
+      content="A polished bilingual vaktija web app for prayer times, Hijri dates, and daily reminders."
+    />
+    <title>Islamic Prayer Vaktija | Prayer Times, Hijri Date, Daily Hadith</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <nav class="topbar" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="Islamic Prayer Times home">
+          <img src="assets/logo.svg" alt="" class="brand-mark" />
+          <span>
+            <strong>Islamic Prayer</strong>
+            <small>Vaktija</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <button id="toggleVerticalMode" class="vertical-toggle" type="button" aria-label="Switch to vertical layout" aria-pressed="false" title="Vertical layout">
+            <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+            <span>Vertical</span>
+          </button>
+          <button id="toggleFullscreen" class="fullscreen-toggle" type="button" aria-label="Enter full screen" title="Full screen">
+            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+          </button>
+          <div class="language-switch" aria-label="Language">
+            <button class="lang-button active" type="button" data-lang="en" aria-pressed="true">EN</button>
+            <button class="lang-button" type="button" data-lang="bs" aria-pressed="false">BS</button>
+          </div>
+          <button id="toggleDarkMode" class="theme-toggle" type="button" aria-label="Toggle night mode">
+            <span class="theme-track" aria-hidden="true">
+              <span class="theme-thumb"><i class="fa-solid fa-moon"></i></span>
+            </span>
+            <span>Night</span>
+          </button>
+        </div>
+      </nav>
+
+      <section id="top" class="hero">
+        <div class="hero-copy">
+          <p class="tv-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span id="tvLocation">Loading location...</span></p>
+          <p class="eyebrow" data-i18n="appEyebrow">English + Bosnian</p>
+          <h1 data-i18n="heroTitle">Prayer times with a calm daily rhythm.</h1>
+          <p class="hero-text" data-i18n="heroText">
+            Search any city, including Berlin, and get today's salah times with
+            the Islamic calendar, important days, and hadith reminders.
+          </p>
+          <div class="today-strip" aria-label="Today's dates">
+            <div>
+              <span data-i18n="today">Today</span>
+              <strong id="heroGregorianDate"></strong>
+            </div>
+            <div>
+              <span data-i18n="hijriToday">Hijri today</span>
+              <strong id="heroHijriDate">Loading...</strong>
+            </div>
+          </div>
+          <div class="tv-next-prayer" aria-live="polite">
+            <span class="tv-next-label"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-i18n="nextPrayer">Next prayer</span></span>
+            <strong id="tvNextPrayer">--</strong>
+            <span id="tvNextCountdown" class="tv-next-countdown">--</span>
+          </div>
+        </div>
+
+        <form class="search-panel" id="locationForm">
+          <label for="locationInput" data-i18n="cityLabel">City</label>
+          <div class="location-input-group">
+            <input
+              type="search"
+              id="locationInput"
+              placeholder="Search city, e.g. Sydney, Australia"
+              data-i18n-placeholder="cityPlaceholder"
+              autocomplete="address-level2"
+              list="citySuggestions"
+              class="location-input"
+            />
+            <button id="searchBtn" class="btn btn-primary" type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span data-i18n="search">Search</span>
+            </button>
+          </div>
+          <datalist id="citySuggestions">
+            <option value="Sydney, Australia"></option>
+            <option value="Melbourne, Australia"></option>
+            <option value="Sarajevo, Bosnia and Herzegovina"></option>
+            <option value="Berlin, Germany"></option>
+            <option value="London, United Kingdom"></option>
+            <option value="Vienna, Austria"></option>
+            <option value="Zagreb, Croatia"></option>
+            <option value="New York, United States"></option>
+            <option value="Toronto, Canada"></option>
+          </datalist>
+          <button id="gpsBtn" class="btn btn-secondary" type="button">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <span data-i18n="gps">Use my location</span>
+          </button>
+          <div id="locationName" class="location-name" aria-live="polite"></div>
+        </form>
+      </section>
+    </header>
+
+    <main>
+      <section class="section prayer-section" aria-labelledby="prayerTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="vaktijaEyebrow">Today's Vaktija</p>
+            <h2 id="prayerTitle" data-i18n="prayerTitle">Prayer Times</h2>
+          </div>
+          <div class="date-pill">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="todayGregorian"></span>
+          </div>
+        </div>
+
+        <div id="loadingSpinner" class="loading-spinner">
+          <i class="fa-solid fa-spinner"></i>
+          <span data-i18n="loading">Loading prayer times...</span>
+        </div>
+        <div id="prayerTimesContainer" class="prayer-times-grid"></div>
+      </section>
+
+      <section class="section calendar-section" aria-labelledby="calendarTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="hijriEyebrow">Hijri Calendar</p>
+            <h2 id="calendarTitle" data-i18n="hijriTitle">Islamic Date</h2>
+          </div>
+          <p class="soft-note" data-i18n="moonNote">Dates can differ by moon sighting and local authority.</p>
+        </div>
+        <div id="islamicDateContainer" class="islamic-date-box"></div>
+      </section>
+
+      <section class="section days-section" aria-labelledby="daysTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="daysEyebrow">Important Days</p>
+            <h2 id="daysTitle" data-i18n="daysTitle">Islamic Calendar Highlights</h2>
+          </div>
+        </div>
+        <div id="importantDaysContainer" class="important-days-grid"></div>
+      </section>
+
+      <section class="section hadith-section" aria-labelledby="hadithTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="reminderEyebrow">Daily Reminder</p>
+            <h2 id="hadithTitle" data-i18n="reminderTitle">Hadith and Quran</h2>
+          </div>
+          <div class="hadith-controls" aria-label="Hadith controls">
+            <button id="prevHadithBtn" class="icon-button" type="button" aria-label="Previous reminder">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button id="randomHadithBtn" class="icon-button" type="button" aria-label="Random reminder">
+              <i class="fa-solid fa-shuffle"></i>
+            </button>
+            <button id="nextHadithBtn" class="icon-button" type="button" aria-label="Next reminder">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="hadith-container">
+          <article class="hadith-card">
+            <span>English</span>
+            <p id="hadithEnglish" class="hadith-text"></p>
+          </article>
+          <article class="hadith-card hadith-card-arabic">
+            <span>Arabic</span>
+            <p id="hadithArabic" class="hadith-text hadith-arabic"></p>
+          </article>
+          <article class="hadith-card">
+            <span>Bosanski</span>
+            <p id="hadithBosnian" class="hadith-text"></p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <img src="assets/logo.svg" alt="" class="footer-logo" />
+      <p>Islamic Prayer Vaktija</p>
+      <small data-i18n="footerNote">Prayer times are calculated by location. May Allah accept from us and from you.</small>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="hadith-data.js"></script>
+    <script src="script.js"></script>
+    <script>
+      if ("serviceWorker" in navigator && APP_CONFIG.FEATURES.serviceWorker) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js").catch(console.warn);
+        });
+      }
+    </script>
+  </body>
+</html>

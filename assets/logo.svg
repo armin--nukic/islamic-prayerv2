@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Islamic Prayer logo">
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="112" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1f6f5c"/>
+      <stop offset="1" stop-color="#12362f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="41" y1="18" x2="98" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3d77a"/>
+      <stop offset="1" stop-color="#bf8f32"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <path d="M78 20c-18 4-31 20-31 39 0 22 18 40 40 40 7 0 14-2 20-6-8 12-22 20-38 20-25 0-46-21-46-46 0-23 17-42 39-45 5-1 10-1 16-2Z" fill="url(#gold)"/>
+  <path d="M85 24l4 10 10 4-10 4-4 10-4-10-10-4 10-4 4-10Z" fill="#f7e6a3"/>
+  <path d="M47 93V57c0-10 8-18 17-18s17 8 17 18v36" fill="none" stroke="#f7e6a3" stroke-width="8" stroke-linecap="round"/>
+  <path d="M37 97h54" stroke="#f7e6a3" stroke-width="8" stroke-linecap="round"/>
+</svg>
