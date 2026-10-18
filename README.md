@@ -1,7 +1,5 @@
 # Islamic Prayer Times | Vaktija
 
-https://prayer-time.work.gd/
-
 A mobile-friendly Islamic prayer times web app in English and Bosnian. It shows today's salah times for any searched city, the current Hijri date, important Islamic calendar days, and daily hadith/Quran reminders.
 
 ## Features
