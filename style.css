@@ -3466,3 +3466,141 @@ body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading {
     margin-bottom: 6px;
   }
 }
+
+/* Refined everyday layout: softer surfaces, clearer spacing, and calmer type. */
+:root {
+  --radius: 18px;
+  --shadow: 0 14px 38px rgba(29, 38, 34, 0.09);
+  --shadow-soft: 0 6px 20px rgba(29, 38, 34, 0.06);
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 8% 30%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 34rem),
+    linear-gradient(180deg, var(--surface-strong), var(--bg) 36rem);
+}
+
+.app-header {
+  padding-top: 22px;
+  padding-bottom: clamp(36px, 5vw, 68px);
+  background:
+    radial-gradient(ellipse at 85% 4%, rgba(232, 198, 111, 0.15), transparent 32rem),
+    linear-gradient(125deg, #102c26, #155343 58%, #12392f);
+}
+
+.topbar { min-height: 60px; }
+.brand { gap: 10px; }
+.brand-mark { filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.2)); }
+.top-actions { gap: 8px; }
+
+.hero {
+  padding-top: clamp(48px, 7vw, 88px);
+  gap: clamp(22px, 4vw, 56px);
+}
+
+h1 {
+  max-width: 700px;
+  font-size: clamp(2.7rem, 5.4vw, 4.65rem);
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3.1vw, 2.55rem);
+  line-height: 1.12;
+}
+
+.eyebrow { letter-spacing: 0.09em; }
+.hero-text { max-width: 600px; line-height: 1.75; }
+.today-strip { gap: 12px; margin-top: 26px; }
+.today-strip > div { min-width: 0; }
+.today-strip strong { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.today-strip > div {
+  min-height: 82px;
+  padding: 15px 17px;
+  border-radius: 16px;
+  background: rgba(255, 250, 240, 0.08);
+}
+
+.search-panel {
+  padding: clamp(18px, 2vw, 24px);
+  border-radius: 20px;
+  box-shadow: 0 20px 54px rgba(3, 18, 14, 0.24);
+}
+
+.location-input, .btn { border-radius: 13px; }
+.location-input { min-height: 50px; }
+.btn { transition: transform 160ms ease, box-shadow 160ms ease; }
+.btn:hover { transform: translateY(-1px); }
+
+main { padding-top: clamp(30px, 4vw, 54px); }
+.section { padding: clamp(22px, 3vw, 34px) 0; }
+.section-heading { margin-bottom: 20px; }
+.date-pill { border-radius: 999px; }
+
+.prayer-times-grid, .important-days-grid, .hadith-container { gap: 16px; }
+.prayer-card, .day-card, .hadith-card, .islamic-date-box {
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+.prayer-card {
+  min-height: 190px;
+  padding: 20px 17px;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.prayer-card:hover, .day-card:hover, .hadith-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.prayer-card.active { box-shadow: 0 18px 40px color-mix(in srgb, var(--primary) 28%, transparent); }
+.prayer-time { font-size: clamp(1.85rem, 3vw, 2.45rem); }
+.islamic-date-box { padding: 18px; gap: 12px; }
+.date-column { border-radius: 15px; }
+.day-card { min-height: 205px; padding: 20px; }
+.hadith-card { min-height: 210px; padding: 24px; }
+.hadith-text { line-height: 1.8; }
+.footer { padding-top: 28px; }
+
+:where(button, input, a):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 82%, white);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .app-header { padding: 14px 16px 30px; }
+  .topbar { align-items: center; gap: 8px; }
+  .brand-mark { width: 40px; height: 40px; }
+  .top-actions { gap: 6px; }
+  .hero { padding-top: 38px; gap: 20px; }
+  h1 { font-size: clamp(2.45rem, 9vw, 3.2rem); }
+  .hero-text { margin-top: 12px; font-size: 0.96rem; line-height: 1.65; }
+  .today-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 18px; }
+  .today-strip > div { min-height: 76px; padding: 12px; }
+  .today-strip strong { font-size: 0.9rem; line-height: 1.4; }
+  .search-panel { padding: 16px; }
+  .section { padding: 20px 0; }
+  .section-heading { margin-bottom: 15px; }
+  .prayer-times-grid, .important-days-grid, .hadith-container { gap: 11px; }
+  .prayer-card { min-height: 156px; padding: 14px 11px; border-radius: 16px; }
+  .prayer-name { font-size: 0.92rem; }
+  .prayer-time { font-size: clamp(1.65rem, 7vw, 2rem); }
+  .day-card { min-height: 190px; padding: 16px; border-radius: 16px; }
+  .hadith-card { min-height: auto; padding: 19px; border-radius: 16px; }
+  .islamic-date-box { padding: 12px; }
+  .soft-note { text-align: left; }
+}
+
+@media (max-width: 390px) {
+  .topbar { align-items: flex-start; }
+  .brand strong { font-size: 0.88rem; }
+  .brand small { font-size: 0.76rem; }
+  .vertical-toggle { min-width: 40px; padding-inline: 9px; }
+  .vertical-toggle span { display: none; }
+  .theme-toggle { min-width: 42px; width: 42px; padding: 5px; }
+  .theme-toggle > span:last-child { display: none; }
+  .today-strip { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prayer-card, .day-card, .hadith-card, .btn { transition: none; }
+}
