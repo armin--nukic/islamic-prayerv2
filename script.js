@@ -5,6 +5,8 @@ let currentTimeZone = APP_CONFIG.DEFAULT_LOCATION.timeZone || Intl.DateTimeForma
 let currentHadithIndex = 0;
 let currentLanguage = "en";
 let locationRequestId = 0;
+let prayerTimesDateKey = null;
+let refreshingPrayerDateKey = null;
 const LOCATION_STORAGE_KEY = "selected-vaktija-location";
 
 const i18n = {
@@ -32,6 +34,12 @@ const i18n = {
     footerNote: "Prayer times are calculated by location. May Allah accept from us and from you.",
     next: "Next",
     nextPrayer: "Next prayer",
+    currentPrayer: "Current prayer",
+    localTime: "Local time",
+    betweenPrayers: "Between prayers",
+    startedAt: "Started at",
+    startsAt: "Starts",
+    tomorrow: "Tomorrow",
     enterFullscreen: "Enter full screen",
     exitFullscreen: "Exit full screen",
     nextIn: "Next in",
@@ -69,6 +77,12 @@ const i18n = {
     footerNote: "Vremena namaza se ra\u010dunaju prema lokaciji. Neka Allah primi od nas i od vas.",
     next: "Sljede\u0107i",
     nextPrayer: "Sljede\u0107i namaz",
+    currentPrayer: "Trenutni namaz",
+    localTime: "Lokalno vrijeme",
+    betweenPrayers: "Izme\u0111u namaza",
+    startedAt: "Po\u010deo u",
+    startsAt: "Po\u010dinje",
+    tomorrow: "Sutra",
     enterFullscreen: "Uklju\u010di puni ekran",
     exitFullscreen: "Iza\u0111i iz punog ekrana",
     nextIn: "Sljede\u0107i za",
@@ -195,7 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeLocation();
   }
 
+  updateLocalClock();
+  setInterval(updateLocalClock, 1000);
   setInterval(updatePrayerHighlight, 30000);
+  setInterval(refreshPrayerTimesForNewLocalDay, 60000);
 });
 
 function setupTheme() {
@@ -498,6 +515,8 @@ function fetchPrayerTimes(latitude, longitude, requestId = locationRequestId) {
       currentIslamicDate = data.data.date.hijri;
       currentGregorianDate = data.data.date.gregorian;
       currentTimeZone = data.data.meta?.timezone || currentTimeZone;
+      prayerTimesDateKey = getLocalDateKey();
+      refreshingPrayerDateKey = null;
       const selected = loadSavedLocation();
       if (selected?.latitude === Number(latitude) && selected?.longitude === Number(longitude)) {
         selected.timeZone = currentTimeZone;
@@ -515,9 +534,26 @@ function fetchPrayerTimes(latitude, longitude, requestId = locationRequestId) {
     })
     .catch((error) => {
       if (requestId !== locationRequestId) return;
+      refreshingPrayerDateKey = null;
       showLoading(false);
       showError(error.message);
     });
+}
+
+function getLocalDateKey() {
+  const { year, month, day } = getZonedDateParts(new Date());
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function refreshPrayerTimesForNewLocalDay() {
+  if (!currentPrayerTimes) return;
+  const todayKey = getLocalDateKey();
+  if (todayKey === prayerTimesDateKey || todayKey === refreshingPrayerDateKey) return;
+
+  const selected = loadSavedLocation() || APP_CONFIG.DEFAULT_LOCATION;
+  if (!Number.isFinite(Number(selected.latitude)) || !Number.isFinite(Number(selected.longitude))) return;
+  refreshingPrayerDateKey = todayKey;
+  fetchPrayerTimes(selected.latitude, selected.longitude);
 }
 
 function displayPrayerTimes(timings) {
@@ -532,13 +568,13 @@ function displayPrayerTimes(timings) {
     card.innerHTML = `
       <div>
         <div class="prayer-name">
-          <i class="fa-solid ${prayer.icon}"></i>
+          <i class="fa-solid ${prayer.icon}" aria-hidden="true"></i>
           ${currentLanguage === "bs" ? prayer.bs : prayer.en}
           <span class="prayer-bosnian">${currentLanguage === "bs" ? prayer.en : prayer.bs}</span>
         </div>
       </div>
       <div class="prayer-time">${time}</div>
-      <div class="prayer-arabic">${prayer.ar}</div>
+      <div class="prayer-arabic" lang="ar" dir="rtl">${prayer.ar}</div>
     `;
     container.appendChild(card);
   });
@@ -551,10 +587,13 @@ function updatePrayerHighlight() {
 
   document.querySelectorAll(".prayer-card").forEach((card) => {
     card.classList.remove("active");
+    card.classList.remove("current-prayer");
+    card.querySelector(".prayer-current-label")?.remove();
     card.querySelector(".prayer-countdown")?.remove();
   });
 
   const now = new Date();
+  const currentPeriod = getCurrentPrayerPeriod(now);
   const nextPrayer = prayerItems
     .filter((prayer) => prayer.apiKey !== "Sunrise")
     .map((prayer) => {
@@ -573,12 +612,83 @@ function updatePrayerHighlight() {
   const nextPrayerName = currentLanguage === "bs" ? nextPrayer.bs : nextPrayer.en;
   document.getElementById("tvNextPrayer").textContent = nextPrayerName;
   document.getElementById("tvNextCountdown").textContent = `${t("nextIn")} ${calculateCountdown(nextPrayer.time, nextPrayer.tomorrow)}`;
+  const nextStartLabel = nextPrayer.tomorrow
+    ? `${t("tomorrow")} · ${t("startsAt").toLowerCase()}`
+    : t("startsAt");
+  document.getElementById("tvNextPrayerTime").textContent = `${nextStartLabel} ${formatLocalPrayerTime(nextPrayer.time)}`;
+  if (currentPeriod.prayer) {
+    const currentCard = document.getElementById(`prayer-${currentPeriod.prayer.apiKey.toLowerCase()}`);
+    if (currentCard) {
+      currentCard.classList.add("current-prayer");
+      const currentLabel = document.createElement("span");
+      currentLabel.className = "prayer-current-label";
+      currentLabel.textContent = t("currentPrayer");
+      currentCard.appendChild(currentLabel);
+    }
+  }
   card.classList.add("active");
   card.dataset.nextLabel = t("next");
   const countdown = document.createElement("div");
   countdown.className = "prayer-countdown";
   countdown.textContent = `${t("nextIn")} ${calculateCountdown(nextPrayer.time, nextPrayer.tomorrow)}`;
   card.appendChild(countdown);
+}
+
+function updateLocalClock() {
+  const clock = document.getElementById("tvLocalTime");
+  if (!clock) return;
+  clock.textContent = new Intl.DateTimeFormat(currentLanguage === "bs" ? "bs-BA" : "en-GB", {
+    timeZone: currentTimeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date());
+}
+
+function formatLocalPrayerTime(timeString) {
+  const [hour, minute] = cleanTime(timeString).split(":").map(Number);
+  const nowParts = getZonedDateParts(new Date());
+  const date = zonedDateTimeToDate({ ...nowParts, hour, minute });
+  return new Intl.DateTimeFormat(currentLanguage === "bs" ? "bs-BA" : "en-GB", {
+    timeZone: currentTimeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(date);
+}
+
+function getCurrentPrayerPeriod(now = new Date()) {
+  if (!currentPrayerTimes) return { prayer: null, startTime: "--:--" };
+
+  const currentParts = getZonedDateParts(now);
+  const currentMinutes = currentParts.hour * 60 + currentParts.minute;
+  const minutesAt = (key) => {
+    const [hour, minute] = cleanTime(currentPrayerTimes[key]).split(":").map(Number);
+    return hour * 60 + minute;
+  };
+  const fajr = minutesAt("Fajr");
+  const sunrise = minutesAt("Sunrise");
+  const dhuhr = minutesAt("Dhuhr");
+  const asr = minutesAt("Asr");
+  const maghrib = minutesAt("Maghrib");
+  const isha = minutesAt("Isha");
+  const prayerAt = (apiKey, time) => ({
+    prayer: prayerItems.find((item) => item.apiKey === apiKey),
+    startTime: time,
+  });
+
+  if (currentMinutes >= fajr && currentMinutes < sunrise) return prayerAt("Fajr", currentPrayerTimes.Fajr);
+  if (currentMinutes >= sunrise && currentMinutes < dhuhr) {
+    return {
+      prayer: null,
+      startTime: currentPrayerTimes.Dhuhr,
+      nextPrayerName: currentLanguage === "bs" ? "Podne" : "Dhuhr",
+    };
+  }
+  if (currentMinutes >= dhuhr && currentMinutes < asr) return prayerAt("Dhuhr", currentPrayerTimes.Dhuhr);
+  if (currentMinutes >= asr && currentMinutes < maghrib) return prayerAt("Asr", currentPrayerTimes.Asr);
+  if (currentMinutes >= maghrib && currentMinutes < isha) return prayerAt("Maghrib", currentPrayerTimes.Maghrib);
+  return prayerAt("Isha", currentPrayerTimes.Isha);
 }
 
 function displayIslamicDate(hijriDate, gregorianDate) {

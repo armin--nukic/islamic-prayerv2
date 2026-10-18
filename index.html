@@ -93,11 +93,6 @@
               <strong id="heroHijriDate">Loading...</strong>
             </div>
           </div>
-          <div class="tv-next-prayer" aria-live="polite">
-            <span class="tv-next-label"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-i18n="nextPrayer">Next prayer</span></span>
-            <strong id="tvNextPrayer">--</strong>
-            <span id="tvNextCountdown" class="tv-next-countdown">--</span>
-          </div>
         </div>
 
         <form class="search-panel" id="locationForm">
@@ -138,6 +133,20 @@
     </header>
 
     <main>
+      <div class="tv-next-prayer tv-status-panel">
+        <div class="tv-status-item tv-status-clock">
+          <span class="tv-next-label"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-i18n="localTime">Local time</span></span>
+          <strong id="tvLocalTime">--:--</strong>
+        </div>
+        <div class="tv-status-item tv-status-next">
+          <span class="tv-next-label"><i class="fa-solid fa-mosque" aria-hidden="true"></i> <span data-i18n="nextPrayer">Next prayer</span></span>
+          <div class="tv-next-line">
+            <strong id="tvNextPrayer">--</strong>
+            <span id="tvNextCountdown" class="tv-next-countdown">--</span>
+          </div>
+          <small id="tvNextPrayerTime">--</small>
+        </div>
+      </div>
       <section class="section prayer-section" aria-labelledby="prayerTitle">
         <div class="section-heading">
           <div>

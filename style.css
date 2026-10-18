@@ -614,9 +614,12 @@ main {
   color: var(--accent);
   font-size: 1.12rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.55;
   letter-spacing: 0.025em;
   text-shadow: 0 2px 14px color-mix(in srgb, var(--accent) 24%, transparent);
+  padding: 0 0 0.12em;
+  text-align: center;
+  text-rendering: optimizeLegibility;
 }
 
 .prayer-countdown {
@@ -766,9 +769,107 @@ body.dark-mode .app-header {
   font-weight: 900;
 }
 
-.tv-location,
-.tv-next-prayer {
+.tv-location {
   display: none;
+}
+
+.tv-next-prayer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr) minmax(0, 1.28fr);
+  align-items: center;
+  gap: clamp(10px, 1.5vw, 18px);
+  width: 100%;
+  margin-top: 20px;
+  padding: clamp(10px, 1.2vw, 15px) clamp(12px, 1.6vw, 20px);
+  border: 1px solid rgba(240, 209, 133, 0.48);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 12% 50%, rgba(240, 209, 133, 0.15), transparent 35%),
+    linear-gradient(110deg, rgba(240, 209, 133, 0.16), rgba(255, 255, 255, 0.07));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+.tv-status-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.tv-next-label {
+  color: #f0d185;
+  font-size: clamp(0.66rem, 1vw, 0.8rem);
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  line-height: 1.25;
+}
+
+.tv-next-label i {
+  margin-right: 4px;
+}
+
+.tv-status-item strong {
+  display: block;
+  min-width: 0;
+  color: #fffaf0;
+  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  font-weight: 900;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.tv-status-item:first-child strong {
+  color: #f4d889;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+}
+
+.tv-status-item small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 250, 240, 0.76);
+  font-size: clamp(0.66rem, 0.95vw, 0.8rem);
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.tv-status-next .tv-next-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tv-status-next .tv-next-countdown {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 9px;
+  background: linear-gradient(140deg, #f2d587, #d5a94d);
+  color: #17372e;
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.prayer-card.current-prayer:not(.active) {
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--line));
+  box-shadow: var(--shadow-soft), inset 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.prayer-current-label {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fffaf0;
+  font-size: 0.68rem;
+  font-weight: 900;
 }
 
 @keyframes spin {
@@ -2529,6 +2630,283 @@ body.dark-mode .app-header {
   }
 }
 
+@media (min-width: 600px) {
+  body.vertical-mode .tv-status-panel,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr) minmax(0, 1.28fr);
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 599px) {
+  body.vertical-mode .tv-status-panel,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel {
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 0.95fr) minmax(0, 1.27fr);
+    gap: 5px;
+    margin-top: 6px;
+    padding: 7px 8px;
+    border-radius: 12px;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-next-label,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-next-label {
+    font-size: 0.57rem;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-status-item strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-status-item strong {
+    font-size: clamp(0.72rem, 3.5vw, 0.9rem);
+    line-height: 1.15;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-status-item:first-child strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-status-item:first-child strong {
+    font-size: clamp(0.95rem, 4.5vw, 1.2rem);
+  }
+
+  body.vertical-mode .tv-status-panel .tv-status-item small,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-status-item small {
+    margin-top: 2px;
+    font-size: 0.56rem;
+    line-height: 1.15;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-next-line,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-next-line {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 3px 5px;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-next-countdown,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel .tv-next-countdown {
+    padding: 3px 5px;
+    font-size: 0.56rem;
+  }
+}
+
+@media (min-width: 600px) {
+  body.vertical-mode .hero-copy,
+  body.fullscreen-mode:not(.vertical-mode) .hero-copy {
+    text-align: center;
+  }
+
+  body.vertical-mode .tv-location,
+  body.fullscreen-mode:not(.vertical-mode) .tv-location {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  body.vertical-mode .today-strip,
+  body.fullscreen-mode:not(.vertical-mode) .today-strip {
+    max-width: 1080px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  body.vertical-mode .tv-status-panel,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    width: min(100%, 1360px);
+    min-height: 164px;
+    margin: clamp(12px, 1.8vh, 20px) auto 0;
+    padding: 18px clamp(16px, 3vw, 36px);
+    text-align: center;
+    border-radius: 22px;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(244, 216, 137, 0.17), transparent 55%),
+      linear-gradient(115deg, rgba(240, 209, 133, 0.2), rgba(255, 255, 255, 0.08) 48%, rgba(88, 199, 167, 0.1));
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  body.vertical-mode .tv-status-item,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item {
+    align-items: center;
+  }
+
+  body.vertical-mode .tv-status-item + .tv-status-item,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item + .tv-status-item {
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  body.vertical-mode .tv-status-item:first-child strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item:first-child strong {
+    font-size: clamp(2.3rem, 5vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.055em;
+    text-shadow: 0 4px 24px rgba(244, 216, 137, 0.24);
+  }
+
+  body.vertical-mode .tv-status-item:nth-child(2) strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item:nth-child(2) strong {
+    font-size: clamp(1.45rem, 2.8vw, 2.4rem);
+  }
+
+  body.vertical-mode .tv-status-next .tv-next-line,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-next .tv-next-line {
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  body.vertical-mode .tv-status-next strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-next strong {
+    font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+  }
+
+  body.vertical-mode .search-panel,
+  body.fullscreen-mode:not(.vertical-mode) .search-panel {
+    width: min(100%, 1240px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  body.vertical-mode .tv-status-next .tv-next-countdown,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-next .tv-next-countdown {
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: clamp(1rem, 1.8vw, 1.45rem);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.16);
+  }
+
+  body.vertical-mode .prayer-section .section-heading,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading {
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: clamp(12px, 1.5vh, 20px);
+    text-align: center;
+  }
+
+  body.vertical-mode .prayer-section .section-heading > div:first-child,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading > div:first-child {
+    display: grid;
+    justify-items: center;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  body.vertical-mode .prayer-section h2,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-section h2 {
+    font-size: clamp(2rem, 4.2vw, 3.8rem);
+    letter-spacing: -0.05em;
+  }
+
+  body.vertical-mode .date-pill,
+  body.fullscreen-mode:not(.vertical-mode) .date-pill {
+    max-width: none;
+    padding: 7px 14px;
+  }
+
+  body.vertical-mode .prayer-card,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-card {
+    align-items: center;
+    text-align: center;
+  }
+
+  body.vertical-mode .prayer-name i,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-name i {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  body.vertical-mode .prayer-time,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-time {
+    font-size: clamp(2.2rem, 5.2vw, 4.4rem);
+  }
+
+  body.vertical-mode .prayer-arabic,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-arabic {
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+  }
+
+  body.vertical-mode .prayer-card.active .prayer-countdown,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-card.active .prayer-countdown {
+    align-self: center;
+    padding: 8px 14px;
+    border-radius: 11px;
+    font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  }
+}
+
+@media (max-width: 599px) {
+  body.vertical-mode .hero-copy,
+  body.fullscreen-mode:not(.vertical-mode) .hero-copy {
+    text-align: center;
+  }
+
+  body.vertical-mode .tv-location,
+  body.fullscreen-mode:not(.vertical-mode) .tv-location {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  body.vertical-mode .tv-status-panel,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-panel {
+    min-height: 108px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(244, 216, 137, 0.16), transparent 58%),
+      linear-gradient(115deg, rgba(240, 209, 133, 0.2), rgba(255, 255, 255, 0.08) 50%, rgba(88, 199, 167, 0.1));
+  }
+
+  body.vertical-mode .tv-status-item,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item {
+    align-items: center;
+  }
+
+  body.vertical-mode .tv-status-item:first-child strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item:first-child strong {
+    font-size: clamp(1.1rem, 5.4vw, 1.65rem);
+  }
+
+  body.vertical-mode .tv-status-item:nth-child(2) strong,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-item:nth-child(2) strong {
+    font-size: clamp(0.78rem, 3.8vw, 1rem);
+  }
+
+  body.vertical-mode .tv-status-next .tv-next-countdown,
+  body.fullscreen-mode:not(.vertical-mode) .tv-status-next .tv-next-countdown {
+    font-size: 0.62rem;
+  }
+
+  body.vertical-mode .prayer-section .section-heading,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  body.vertical-mode .prayer-section .section-heading > div:first-child,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading > div:first-child {
+    display: grid;
+    justify-items: center;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  body.vertical-mode .prayer-card,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-card {
+    align-items: center;
+    text-align: center;
+  }
+
+  body.vertical-mode .prayer-time,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-time {
+    font-size: clamp(1.25rem, 6.7vw, 2.1rem);
+  }
+
+  body.vertical-mode .prayer-card.active .prayer-countdown,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-card.active .prayer-countdown {
+    align-self: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2536,5 +2914,555 @@ body.dark-mode .app-header {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+
+/* Clear, centered status hierarchy for fullscreen TV layouts. */
+body.vertical-mode .tv-status-panel,
+body.fullscreen-mode .tv-status-panel {
+  margin-inline: auto;
+}
+
+body.vertical-mode .tv-status-item,
+body.fullscreen-mode .tv-status-item {
+  justify-content: center;
+  text-align: center;
+}
+
+body.vertical-mode .tv-status-panel .tv-next-label,
+body.fullscreen-mode .tv-status-panel .tv-next-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  font-size: clamp(0.78rem, 1vw, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+body.vertical-mode .tv-status-panel .tv-next-label i,
+body.fullscreen-mode .tv-status-panel .tv-next-label i {
+  color: var(--accent);
+}
+
+body.vertical-mode .tv-prayer-start,
+body.fullscreen-mode .tv-prayer-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 9px;
+}
+
+body.vertical-mode .tv-prayer-start span,
+body.fullscreen-mode .tv-prayer-start span {
+  color: var(--muted);
+  font-size: clamp(0.74rem, 1vw, 0.95rem);
+  font-weight: 700;
+}
+
+body.vertical-mode .tv-prayer-start strong,
+body.fullscreen-mode .tv-prayer-start strong {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 48%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+  color: var(--accent);
+  font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+}
+
+body.vertical-mode .tv-status-panel .tv-status-item:nth-child(2) > strong,
+body.fullscreen-mode .tv-status-panel .tv-status-item:nth-child(2) > strong {
+  color: var(--text);
+}
+
+body.vertical-mode .tv-location,
+body.fullscreen-mode .tv-location {
+  justify-content: center;
+  max-width: min(100%, 1000px);
+  margin-inline: auto;
+  text-align: center;
+}
+
+body.vertical-mode .tv-status-next .tv-next-line,
+body.fullscreen-mode .tv-status-next .tv-next-line {
+  align-items: center;
+}
+
+@media (max-width: 599px) {
+  body.vertical-mode .tv-prayer-start,
+  body.fullscreen-mode .tv-prayer-start {
+    gap: 3px 5px;
+    margin-top: 4px;
+  }
+
+  body.vertical-mode .tv-prayer-start span,
+  body.fullscreen-mode .tv-prayer-start span {
+    font-size: 0.55rem;
+  }
+
+  body.vertical-mode .tv-prayer-start strong,
+  body.fullscreen-mode .tv-prayer-start strong {
+    padding: 2px 6px;
+    font-size: 0.72rem;
+  }
+
+  body.vertical-mode .tv-status-panel .tv-next-label,
+  body.fullscreen-mode .tv-status-panel .tv-next-label {
+    gap: 3px;
+    margin-bottom: 3px;
+    font-size: 0.54rem;
+    letter-spacing: 0.03em;
+  }
+}
+
+/* Final override after layout breakpoints: Arabic labels must never be clipped. */
+body.vertical-mode .prayer-card,
+body.fullscreen-mode:not(.vertical-mode) .prayer-card {
+  justify-content: center;
+  gap: clamp(3px, 0.7vh, 8px);
+  padding: clamp(9px, 1vw, 16px);
+}
+
+body.vertical-mode .prayer-time,
+body.fullscreen-mode:not(.vertical-mode) .prayer-time {
+  font-size: clamp(1.8rem, 4vw, 3.35rem);
+  line-height: 1.02;
+}
+
+body.vertical-mode .prayer-arabic,
+body.fullscreen-mode:not(.vertical-mode) .prayer-arabic {
+  display: block;
+  min-height: 1.45em;
+  margin: 0;
+  padding: 0 0.08em 0.16em;
+  overflow: visible;
+  font-size: clamp(1.3rem, 2.15vw, 1.75rem);
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+body.vertical-mode .prayer-card.current-prayer:not(.active),
+body.fullscreen-mode:not(.vertical-mode) .prayer-card.current-prayer:not(.active) {
+  border-color: color-mix(in srgb, var(--accent) 76%, var(--line));
+  background-image: linear-gradient(145deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface));
+}
+
+body.vertical-mode .prayer-card.active .prayer-arabic,
+body.fullscreen-mode:not(.vertical-mode) .prayer-card.active .prayer-arabic {
+  color: #f5d580;
+  text-shadow: 0 2px 16px rgba(245, 213, 128, 0.25);
+}
+
+@media (max-width: 599px) {
+  body.vertical-mode .prayer-card,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-card {
+    gap: 3px;
+    padding: 8px 5px;
+  }
+
+  body.vertical-mode .prayer-time,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-time {
+    font-size: clamp(1.15rem, 6vw, 1.9rem);
+  }
+
+  body.vertical-mode .prayer-arabic,
+  body.fullscreen-mode:not(.vertical-mode) .prayer-arabic {
+    min-height: 1.4em;
+    padding-bottom: 0.14em;
+    font-size: clamp(1.05rem, 5.3vw, 1.45rem);
+    line-height: 1.45;
+  }
+}
+
+/* Final dashboard layout: a full-width, centered clock and next-prayer focus. */
+main > .tv-status-panel,
+body.vertical-mode main > .tv-status-panel,
+body.fullscreen-mode main > .tv-status-panel {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  width: min(100%, 1360px);
+  min-height: clamp(112px, 15vh, 176px);
+  margin: 0 auto;
+  padding: clamp(14px, 2vh, 22px) clamp(16px, 3vw, 42px);
+  border: 1px solid rgba(226, 187, 99, 0.58);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 22% 100%, rgba(226, 187, 99, 0.22), transparent 48%),
+    radial-gradient(ellipse at 82% 0%, rgba(88, 199, 167, 0.2), transparent 48%),
+    linear-gradient(120deg, #12382f, #174c3e 52%, #10352c);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.16);
+  color: #fff8e8;
+}
+
+.hero > .search-panel {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+}
+
+body.vertical-mode .hero > .search-panel {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
+
+body.vertical-mode .hero > .tv-status-panel,
+body.fullscreen-mode .hero > .tv-status-panel {
+  grid-row: 2;
+}
+
+.tv-status-panel .tv-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.tv-status-panel .tv-status-item + .tv-status-item {
+  border-left: 1px solid rgba(255, 248, 232, 0.22);
+}
+
+.tv-status-panel .tv-next-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 0 0 6px;
+  color: #f5d580;
+  font-size: clamp(0.76rem, 1.05vw, 1rem);
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tv-status-panel .tv-next-label i {
+  color: #f5d580;
+  font-size: 1.05em;
+}
+
+.tv-status-panel .tv-status-clock > strong {
+  color: #fff8e8;
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  text-shadow: 0 4px 24px rgba(245, 213, 128, 0.28);
+}
+
+.tv-status-panel .tv-status-next .tv-next-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.tv-status-panel .tv-status-next #tvNextPrayer {
+  color: #fff8e8;
+  font-size: clamp(1.4rem, 2.3vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.tv-status-panel .tv-status-next .tv-next-countdown {
+  padding: 7px 17px;
+  border: 1px solid rgba(255, 248, 232, 0.45);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5d986, #d7aa4c);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.16);
+  color: #17372e;
+  font-size: clamp(0.95rem, 1.5vw, 1.25rem);
+  font-weight: 950;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.tv-status-panel .tv-status-next small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255, 248, 232, 0.8);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Countdown is prominent in the status panel; removing the duplicate frees card space. */
+body.vertical-mode .prayer-card.active .prayer-countdown,
+body.fullscreen-mode .prayer-card.active .prayer-countdown,
+.prayer-card.active .prayer-countdown {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  body:not(.vertical-mode) .hero > .search-panel {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 599px) {
+  .hero > .tv-status-panel {
+    min-height: 96px;
+    padding: 10px 7px;
+    border-radius: 17px;
+  }
+
+  .tv-status-panel .tv-next-label {
+    gap: 5px;
+    margin-bottom: 5px;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+
+  .tv-status-panel .tv-status-clock > strong {
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+  }
+
+  .tv-status-panel .tv-status-next #tvNextPrayer {
+    font-size: clamp(1.1rem, 5.2vw, 1.5rem);
+  }
+
+  .tv-status-panel .tv-status-next .tv-next-countdown {
+    padding: 5px 9px;
+    font-size: clamp(0.72rem, 3.5vw, 0.9rem);
+  }
+
+  .tv-status-panel .tv-status-next small {
+    margin-top: 3px;
+    font-size: 0.65rem;
+  }
+}
+
+body.vertical-mode .tv-location,
+body.fullscreen-mode .tv-location {
+  width: fit-content;
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+@media (max-width: 599px) {
+  body.vertical-mode .tv-location,
+  body.fullscreen-mode .tv-location {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+body.vertical-mode:not(.dark-mode),
+body.fullscreen-mode:not(.dark-mode) {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(20, 96, 79, 0.12), transparent 48%),
+    linear-gradient(160deg, #f8f5ed, #e2eae4 58%, #f2eee5);
+}
+
+/* Keep the hero, status and prayer grid in separate flow rows in every mode. */
+main {
+  display: block;
+}
+
+main > .tv-status-panel {
+  width: min(100%, 1360px);
+  margin: 0 auto clamp(12px, 2vh, 22px);
+}
+
+body.fullscreen-mode main,
+body.vertical-mode main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  height: auto;
+  padding-top: clamp(10px, 1.5vh, 18px);
+}
+
+body.fullscreen-mode main > .tv-status-panel,
+body.vertical-mode main > .tv-status-panel {
+  flex: 0 0 auto;
+}
+
+body.fullscreen-mode .prayer-section,
+body.vertical-mode .prayer-section {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+body.vertical-mode .hero > .search-panel {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+@media (max-width: 900px) {
+  body:not(.vertical-mode) .hero > .search-panel {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+body.fullscreen-mode:not(.vertical-mode) .hero-copy {
+  text-align: center;
+}
+
+body.fullscreen-mode:not(.vertical-mode) .tv-location {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  white-space: nowrap;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+@media (max-width: 599px) {
+  body.fullscreen-mode:not(.vertical-mode) .tv-location {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Horizontal view: balanced city/search header and tighter prayer dashboard. */
+@media (min-width: 900px) {
+  body:not(.vertical-mode) .hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+    align-items: center;
+    column-gap: clamp(24px, 4vw, 64px);
+    row-gap: 12px;
+  }
+
+  body:not(.vertical-mode) .hero-copy {
+    min-width: 0;
+    text-align: center;
+  }
+
+  body:not(.vertical-mode) .tv-location {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    white-space: nowrap;
+    font-size: clamp(1rem, 1.55vw, 1.45rem);
+  }
+
+  body:not(.vertical-mode) .today-strip {
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  body:not(.vertical-mode) .hero > .search-panel {
+    width: 100%;
+    max-width: 620px;
+    justify-self: end;
+    align-self: center;
+    padding: 14px;
+    border: 1px solid color-mix(in srgb, var(--line) 72%, #fff);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+    box-shadow: 0 16px 40px rgba(4, 24, 19, 0.2);
+  }
+
+  body:not(.vertical-mode) .location-input {
+    min-height: 52px;
+    border-radius: 12px;
+  }
+
+  body:not(.vertical-mode) #searchBtn {
+    min-height: 52px;
+    padding-inline: 20px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 899px) {
+  body:not(.vertical-mode) .hero > .search-panel {
+    justify-self: stretch;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  body:not(.vertical-mode) .tv-location {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 900px) and (orientation: landscape) {
+  body:not(.vertical-mode) .prayer-times-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  body:not(.vertical-mode) .prayer-times-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 600px) {
+  body:not(.vertical-mode) .prayer-card {
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1vh, 12px);
+    min-height: 0;
+    padding: clamp(14px, 1.8vw, 26px);
+    text-align: center;
+  }
+
+  body:not(.vertical-mode) .prayer-name {
+    text-align: center;
+    font-size: clamp(1rem, 1.45vw, 1.4rem);
+  }
+
+  body:not(.vertical-mode) .prayer-time {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  body:not(.vertical-mode) .prayer-arabic {
+    min-height: 1.45em;
+    padding-bottom: 0.16em;
+    font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+    line-height: 1.5;
+  }
+}
+
+body.fullscreen-mode:not(.vertical-mode) main {
+  padding-top: clamp(8px, 1vh, 12px);
+}
+
+body.fullscreen-mode:not(.vertical-mode) main > .tv-status-panel {
+  margin-bottom: clamp(6px, 0.8vh, 10px);
+}
+
+body.fullscreen-mode:not(.vertical-mode) .prayer-section {
+  padding-top: 0;
+  padding-bottom: 6px;
+}
+
+body.fullscreen-mode:not(.vertical-mode) .prayer-section .section-heading {
+  gap: 8px;
+  margin-bottom: clamp(6px, 0.8vh, 10px);
+}
+
+@media (max-width: 599px) {
+  body:not(.vertical-mode) .hero > .search-panel {
+    grid-row: 2;
+  }
+
+  body.fullscreen-mode:not(.vertical-mode) main > .tv-status-panel {
+    margin-bottom: 6px;
   }
 }
