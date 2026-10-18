@@ -1,5 +1,5 @@
 // Service Worker for offline support and caching
-const CACHE_NAME = "islamic-prayer-times-v14";
+const CACHE_NAME = "islamic-prayer-times-v15";
 const URLS_TO_CACHE = [
   "./",
   "./index.html",
